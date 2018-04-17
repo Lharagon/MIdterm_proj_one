@@ -7,19 +7,30 @@ void show_menu_customer_info();
 void show_munu_main_selection();
 void show_menu_options();
 void show_menu_payment();
+void clear_all_options();
+void not_valid();
 bool order_complete();
 string get_name();
+string get_address();
+int get_number();
+int get_card_number();
+
 
 
 int main()
 {
     string name = "", address_number = "", address_street = "", address_st_abbr = "";
     string missing_info = "";
-    string payment_method = "";
-    int card_number;
-    int tel_number;
+    int payment_method = 0;
+    int card_number = 0;
+    int tel_number = 0;
+    int villa_selection = 0;
     int choice;
     int subchoice;
+    double total = 0;
+    bool complete = false, food = false, spa = false, mass = false;
+    bool skin = false, nail = false;
+
 
     do
     {
@@ -28,14 +39,108 @@ int main()
         switch(choice)
         {
             case 1:
-                name = get_name();
+                show_menu_customer_info();
+                cin >> subchoice;
+                switch(subchoice)
+                {
+                    case 1:
+                        name = get_name();
+                        break;
+                    case 2:
+                        tel_number = get_number();
+                        break;
+                    case 3:
+                        get_address();
+                        cin >> address_number;
+                        cin >> address_street;
+                        cin >> address_st_abbr;
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        not_valid();
+
+                }
                 break;
             case 2:
+                show_menu_main_selection();
+                cin >> subchoice;
+                switch(subchoice)
+                {
+                    case 1:
+                    case 2:
+                    case 3:
+                    case 4:
+                        villa_selection = subchoice;
+                        break;
+                    case 5:
+                        break;
+                    default:
+                        not_valid();
+                }
+                break;
+            case 3:
+                show_menu_options();
+                cin >> subchoice;
+                switch(subchoice)
+                {
+                    case 1:
+                        food = true;
+                        break;
+                    case 2:
+                        spa = true;
+                        break;
+                    case 3:
+                        mass = true;
+                        break;
+                    case 4:
+                        skin = true;
+                        break;
+                    case 5:
+                        nail = true;
+                        break;
+                    case 6:
+                        food = false;
+                        spa = false;
+                        mass = false;
+                        skin = false;
+                        nail = false;
+                        break;
+                    case 7:
+                        break;
+                    default:
+                        not_valid();
+                }
+                break;
+            case 4:
+                show_menu_payment();
+                cin >> subchoice;
+                switch(subchoice)
+                {
+                    case 1:
+                    case 2:
+                        card_number = get_card_number();
+                    case 3:
+                        payment_method = subchoice;
+                        break;
+                    case 4:
+                        break;
+                    default:
+                        not_valid();
+                }
+                break;
+            case 5:
+                if order_complete(payment_method, villa_selection, tel_number)
+
+            case 6:
+                break;
+            default:
+                not_valid();
 
 
         }
 
-    }
+    } while(choice != 6);
 
     return 0;
 }
@@ -79,7 +184,8 @@ void show_menu_options()
          << "3. Massage ($262.99)\n"
          << "4. Skin Care ($188.29)\n"
          << "5. Nail Care ($123.45)\n"
-         << "6. Main Menu\n";
+         << "6. Clear all options\n"
+         << "7. Main Menu\n";
 }
 
 void show_menu_payment()
@@ -91,6 +197,11 @@ void show_menu_payment()
          << "4. Main Menu\n";
 }
 
+void not_valid()
+{
+    cout << "Not a valid choice...\n";
+}
+
 string get_name()
 {
     string new_name = "";
@@ -99,3 +210,29 @@ string get_name()
 
     return new_name;
 }
+
+int get_number()
+{
+    int new_num;
+    cout << "What is your phone number (ex: 3235555555)?";
+    cin >> new_num;
+}
+
+int get_card_number()
+{
+    int card;
+    cout << "What is the card number?: ";
+    cin >> card;
+    return card;
+}
+
+// string get_address()
+// {
+
+// }
+
+// double process_main_selection(double villa)
+// {
+//     const double TAX = .1025
+// }
+
