@@ -10,10 +10,12 @@ void show_menu_options();
 void show_menu_payment();
 void clear_all_options();
 void not_valid();
+void display_order();
+void get_address();
 bool order_complete(int pay, int vil, string tel, string name,
                     string add_num, string add_str, string add_abbr, string crd_num);
+double get_total(int pay, int villa, bool food, bool spa, bool mass, bool skin, bool nail);
 string get_name();
-void get_address();
 string get_number();
 string get_card_number();
 
@@ -27,7 +29,7 @@ int main()
     int villa_selection = 0;
     int choice;
     int subchoice;
-    double total = 0;
+    double total;
     bool complete = false, food = false, spa = false, mass = false;
     bool skin = false, nail = false;
 
@@ -144,7 +146,7 @@ int main()
                 break;
             case 5:
                 if (order_complete(payment_method, villa_selection, tel_number, ))
-                    cout << "Hello";
+                    calcula;
             case 6:
                 break;
             default:
@@ -241,17 +243,45 @@ string get_card_number()
     return card;
 }
 
-bool order_complete(int pay, int vil, string tel)
+bool order_complete(int pay, int vil, string tel, string name,
+                    string add_num, string add_str, string add_abbr, string crd_num);
 {
+    bool complete = true;
+    string error_message = "The following information is missing:\n";
+    if(!pay)
+        error_message += "Payment Method\n";
+    if((pay == 1 || pay == 2) && crd_num == "")
+        error_message += "Card Number\n" ;
+    if(!vil)
+        error_message += "Main selection\n";
+    if(tel == "")
+        error_message += "Telephone Number]\n";
+    if(name == "")
+        error_message += "Name\n";
+    if(add_num == "")
+        error_message += "Address Number\n";
+    if(add_str == "") 
+        error_message += "Address Street\n";
+    if(add_abbr == "")
+        error_message += "Address Street Abbreviation\n";
+
+    if(error_message != "The following information is missing:\n")
+        complete = false;
+
+    if(complete)
+        return true;
+    cout << error_message;
     return false;
 }
+
+double get_total(int pay, int villa, bool food, bool spa, bool mass, bool skin, bool nail)
+{
+    return 0;
+}
+
 void get_address()
 {
     cout << "What is your address? (ex. 333 Fake St.): ";
 }
 
-// double process_main_selection(double villa)
-// {
-//     const double TAX = .1025
-// }
 
