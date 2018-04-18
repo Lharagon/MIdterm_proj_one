@@ -1,29 +1,29 @@
 #include <iostream>
 #include <string>
+#include <cstdlib>
 using namespace std;
 
 void show_menu_top();
 void show_menu_customer_info();
-void show_munu_main_selection();
+void show_menu_main_selection();
 void show_menu_options();
 void show_menu_payment();
 void clear_all_options();
 void not_valid();
-bool order_complete();
+bool order_complete(int pay, int vil, string tel, string name,
+                    string add_num, string add_str, string add_abbr, string crd_num);
 string get_name();
-string get_address();
-int get_number();
-int get_card_number();
+void get_address();
+string get_number();
+string get_card_number();
 
 
 
 int main()
 {
-    string name = "", address_number = "", address_street = "", address_st_abbr = "";
-    string missing_info = "";
+    string name = "", address_number = "", address_street = "", address_st_abbr = "", tel_number = "";
+    string missing_info = "", card_number = "";
     int payment_method = 0;
-    int card_number = 0;
-    int tel_number = 0;
     int villa_selection = 0;
     int choice;
     int subchoice;
@@ -39,99 +39,112 @@ int main()
         switch(choice)
         {
             case 1:
-                show_menu_customer_info();
-                cin >> subchoice;
-                switch(subchoice)
+                do
                 {
-                    case 1:
-                        name = get_name();
-                        break;
-                    case 2:
-                        tel_number = get_number();
-                        break;
-                    case 3:
-                        get_address();
-                        cin >> address_number;
-                        cin >> address_street;
-                        cin >> address_st_abbr;
-                        break;
-                    case 4:
-                        break;
-                    default:
-                        not_valid();
-
-                }
+                    show_menu_customer_info();
+                    cin >> subchoice;
+                    switch(subchoice)
+                    {
+                        case 1:
+                            name = get_name();
+                            break;
+                        case 2:
+                            tel_number = get_number();
+                            break;
+                        case 3:
+                            get_address();
+                            cin >> address_number;
+                            cin >> address_street;
+                            cin >> address_st_abbr;
+                            break;
+                        case 4:
+                            break;
+                        default:
+                            not_valid();
+                    }
+                } while ( subchoice != 4);
                 break;
             case 2:
-                show_menu_main_selection();
-                cin >> subchoice;
-                switch(subchoice)
+                do
                 {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                        villa_selection = subchoice;
-                        break;
-                    case 5:
-                        break;
-                    default:
-                        not_valid();
-                }
+                    if ( villa_selection != 0 )
+                        cout << "You have chosen option " << subchoice << ".\n";
+                    show_menu_main_selection();
+                    cin >> subchoice;
+                    switch(subchoice)
+                    {
+                        case 1:
+                        case 2:
+                        case 3:
+                        case 4:
+                            villa_selection = subchoice;
+                            break;
+                        case 5:
+                            break;
+                        default:
+                            not_valid();
+                    }
+                } while( subchoice != 5 );
                 break;
             case 3:
-                show_menu_options();
-                cin >> subchoice;
-                switch(subchoice)
+                do
                 {
-                    case 1:
-                        food = true;
-                        break;
-                    case 2:
-                        spa = true;
-                        break;
-                    case 3:
-                        mass = true;
-                        break;
-                    case 4:
-                        skin = true;
-                        break;
-                    case 5:
-                        nail = true;
-                        break;
-                    case 6:
-                        food = false;
-                        spa = false;
-                        mass = false;
-                        skin = false;
-                        nail = false;
-                        break;
-                    case 7:
-                        break;
-                    default:
-                        not_valid();
-                }
+                    show_menu_options();
+                    cin >> subchoice;
+                    switch(subchoice)
+                    {
+                        case 1:
+                            food = true;
+                            break;
+                        case 2:
+                            spa = true;
+                            break;
+                        case 3:
+                            mass = true;
+                            break;
+                        case 4:
+                            skin = true;
+                            break;
+                        case 5:
+                            nail = true;
+                            break;
+                        case 6:
+                            food = false;
+                            spa = false;
+                            mass = false;
+                            skin = false;
+                            nail = false;
+                            break;
+                        case 7:
+                            break;
+                        default:
+                            not_valid();
+                     }
+                } while( subchoice != 7 );
                 break;
             case 4:
-                show_menu_payment();
-                cin >> subchoice;
-                switch(subchoice)
+                do
                 {
-                    case 1:
-                    case 2:
-                        card_number = get_card_number();
-                    case 3:
-                        payment_method = subchoice;
-                        break;
-                    case 4:
-                        break;
-                    default:
-                        not_valid();
-                }
+                    show_menu_payment();
+                    cin >> subchoice;
+                    switch(subchoice)
+                    {
+                        case 1:
+                        case 2:
+                            card_number = get_card_number();
+                        case 3:
+                            payment_method = subchoice;
+                            break;
+                        case 4:
+                            break;
+                        default:
+                            not_valid();
+                    }
+                } while( subchoice != 4 );
                 break;
             case 5:
-                if order_complete(payment_method, villa_selection, tel_number)
-
+                if (order_complete(payment_method, villa_selection, tel_number, ))
+                    cout << "Hello";
             case 6:
                 break;
             default:
@@ -163,7 +176,7 @@ void show_menu_customer_info()
          << "1. Name\n"
          << "2. Phone Number\n"
          << "3. Address\n"
-         << "4. Main Menu";
+         << "4. Main Menu\n";
 }
 
 void show_menu_main_selection()
@@ -205,31 +218,37 @@ void not_valid()
 string get_name()
 {
     string new_name = "";
-    cout << "What is your name?: \n";
-    cin >> new_name;
+    cout << "What is your name?: ";
+    cin.ignore();
+    getline(cin, new_name);
 
     return new_name;
 }
 
-int get_number()
+string get_number()
 {
-    int new_num;
-    cout << "What is your phone number (ex: 3235555555)?";
+    string new_num;
+    cout << "What is your phone number (ex: 3235555555)?: ";
     cin >> new_num;
+    return new_num;
 }
 
-int get_card_number()
+string get_card_number()
 {
-    int card;
+    string card;
     cout << "What is the card number?: ";
     cin >> card;
     return card;
 }
 
-// string get_address()
-// {
-
-// }
+bool order_complete(int pay, int vil, string tel)
+{
+    return false;
+}
+void get_address()
+{
+    cout << "What is your address? (ex. 333 Fake St.): ";
+}
 
 // double process_main_selection(double villa)
 // {
