@@ -14,17 +14,19 @@ void display_order();
 void get_address();
 bool order_complete(int pay, int vil, string tel, string name,
                     string add_num, string add_str, string add_abbr, string crd_num);
-double get_total(int pay, int villa, bool food, bool spa, bool mass, bool skin, bool nail);
+void get_order_confirmation(int villa, bool food, bool spa, bool mass, bool skin, bool nail);
+void get_customer_information(string name, string tel, string add_num, string add_st, string add_abbr, int pay, string card_num);
 string get_name();
 string get_number();
 string get_card_number();
+string get_gifts(int opt_count);
 
 
 
 int main()
 {
     string name = "", address_number = "", address_street = "", address_st_abbr = "", tel_number = "";
-    string missing_info = "", card_number = "";
+    string card_number = "";
     int payment_method = 0;
     int villa_selection = 0;
     int choice;
@@ -33,6 +35,7 @@ int main()
     bool complete = false, food = false, spa = false, mass = false;
     bool skin = false, nail = false;
 
+    cout << "Welcome";
 
     do
     {
@@ -145,8 +148,11 @@ int main()
                 } while( subchoice != 4 );
                 break;
             case 5:
-                if (order_complete(payment_method, villa_selection, tel_number, ))
-                    calcula;
+                if (order_complete(payment_method, villa_selection, tel_number, name, address_number, address_street, address_st_abbr, card_number)) {
+                    get_order_confirmation(villa_selection, food, spa, mass, skin, nail);
+                    get_customer_information(name, tel_number, address_number, address_street, address_st_abbr, payment_method, card_number);
+                    choice = 6;
+                }
             case 6:
                 break;
             default:
@@ -162,8 +168,7 @@ int main()
 
 void show_menu_top()
 {
-    cout << "Welcome\n\n"
-         << "Please select the number of the option you would like:\n"
+    cout << "\n\nPlease select the number of the option you would like:\n"
          << "1. Input Customer Information\n"
          << "2. Main Selection\n"
          << "3. Options\n"
@@ -244,28 +249,26 @@ string get_card_number()
 }
 
 bool order_complete(int pay, int vil, string tel, string name,
-                    string add_num, string add_str, string add_abbr, string crd_num);
+                    string add_num, string add_str, string add_abbr, string crd_num)
 {
     bool complete = true;
-    string error_message = "The following information is missing:\n";
+    string error_message = "\n\nThe following information is missing:\n";
     if(!pay)
         error_message += "Payment Method\n";
-    if((pay == 1 || pay == 2) && crd_num == "")
-        error_message += "Card Number\n" ;
     if(!vil)
         error_message += "Main selection\n";
     if(tel == "")
-        error_message += "Telephone Number]\n";
+        error_message += "Telephone Number\n";
     if(name == "")
         error_message += "Name\n";
     if(add_num == "")
         error_message += "Address Number\n";
-    if(add_str == "") 
+    if(add_str == "")
         error_message += "Address Street\n";
     if(add_abbr == "")
         error_message += "Address Street Abbreviation\n";
 
-    if(error_message != "The following information is missing:\n")
+    if(error_message != "\n\nThe following information is missing:\n")
         complete = false;
 
     if(complete)
@@ -274,9 +277,107 @@ bool order_complete(int pay, int vil, string tel, string name,
     return false;
 }
 
-double get_total(int pay, int villa, bool food, bool spa, bool mass, bool skin, bool nail)
+void get_order_confirmation(int villa, bool food, bool spa, bool mass, bool skin, bool nail)
 {
-    return 0;
+    string options_selected = "", main_sel = "", gifts;
+    int option_count = 0;
+    double totale = 0.00;
+
+    switch(villa)
+    {
+        case 1:
+            totale += 9285;
+            main_sel = "Superior Villa ($9285)\n";
+            break;
+        case 2:
+            totale += 8770;
+            main_sel = "Deluxe Villa ($8770)\n";
+            break;
+        case 3:
+            totale += 8592;
+            main_sel = "Premium Villa ($8592)\n";
+            break;
+        case 4:
+            totale += 7812;
+            main_sel = "Presidential Villa ($7812)\n";
+    }
+
+    if(food) {
+        totale += 479.89;
+        options_selected += "Food and Wine ($479.89)\n";
+        option_count++;
+    }
+    if(spa) {
+        totale += 291.20;
+        options_selected += "Spa ($291.20)\n";
+        option_count++;
+    }
+    if(mass) {
+        totale += 262.99;
+        options_selected += "Massage ($262.99)\n";
+        option_count++;
+    }
+    if(skin) {
+        totale += 188.29;
+        options_selected += "Skin Care ($188.29)\n";
+        option_count++;
+    }
+    if(nail) {
+        totale += 123.45;
+        options_selected += "Nail Care ($123.45)\n";
+        option_count++;
+    }
+
+    // Apply tax
+    totale *= .1025;
+
+    gifts = get_gifts(option_count);
+
+    cout << "You have placed an order for\n"
+         << main_sel;
+    if(option_count)
+        cout << "With the following options:"
+             << options_selected;
+
+    cout << endl << totale << endl << endl;
+
+    if (gifts != "") {
+        cout << "Congratulations. You will get the following free gift with your order:\n";
+        cout << gifts << endl;
+    }
+
+}
+
+void get_customer_information(string name, string tel, string add_num, string add_st, string add_abbr, int pay, string card_num)
+{
+    cout << "Sold to: " << name << endl;
+    cout << "Telephone: " << tel << endl;
+    cout << "Address: " << add_num << " " << add_st << " " << add_abbr << endl;
+    cout << "Paid by: ";
+
+    if (pay == 1)
+        cout << "Visa number " << card_num << endl;
+    else if (pay == 2)
+        cout << "Mastercard number " << card_num << endl;
+    else
+        cout << "Cash" << endl;
+
+}
+
+string get_gifts(int opt_count)
+{
+    switch(opt_count)
+    {
+        case 0:
+        case 1:
+            return "";
+        case 2:
+            return "Fruit basket";
+        case 3:
+            return "Flower basket";
+    }
+
+    return "Wine basket";
 }
 
 void get_address()
