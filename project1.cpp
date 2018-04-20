@@ -16,6 +16,8 @@ bool order_complete(int pay, int vil, string tel, string name,
                     string add_num, string add_str, string add_abbr, string crd_num);
 void get_order_confirmation(int villa, bool food, bool spa, bool mass, bool skin, bool nail);
 void get_customer_information(string name, string tel, string add_num, string add_st, string add_abbr, int pay, string card_num);
+void show_options(bool food, bool spa, bool mass, bool skin, bool nail);
+double get_total(double totale);
 string get_name();
 string get_number();
 string get_card_number();
@@ -73,7 +75,7 @@ int main()
                 do
                 {
                     if ( villa_selection != 0 )
-                        cout << "You have chosen option " << subchoice << ".\n";
+                        cout << "\nYou have chosen option " << villa_selection << ".\n";
                     show_menu_main_selection();
                     cin >> subchoice;
                     switch(subchoice)
@@ -94,6 +96,7 @@ int main()
             case 3:
                 do
                 {
+                    show_options(food, spa, mass, skin, nail);
                     show_menu_options();
                     cin >> subchoice;
                     switch(subchoice)
@@ -179,7 +182,7 @@ void show_menu_top()
 
 void show_menu_customer_info()
 {
-    cout << "Please input the number of the option you would like:\n"
+    cout << "\nPlease input the number of the option you would like:\n"
          << "1. Name\n"
          << "2. Phone Number\n"
          << "3. Address\n"
@@ -188,7 +191,7 @@ void show_menu_customer_info()
 
 void show_menu_main_selection()
 {
-    cout << "Please select one of our four gorgeous villas:\n"
+    cout << "\nPlease select one of our four gorgeous villas:\n"
          << "1. Superior Villa ($9285)\n"
          << "2. Deluxe Villa ($8770)\n"
          << "3. Premium Villa ($8592)\n"
@@ -198,7 +201,7 @@ void show_menu_main_selection()
 
 void show_menu_options()
 {
-      cout << "Please select as many of our five options as you'd like:\n"
+    cout << "\nPlease select as many of our five options as you'd like:\n"
          << "1. Food and Wine ($479.89)\n"
          << "2. Spa ($291.20)\n"
          << "3. Massage ($262.99)\n"
@@ -210,7 +213,7 @@ void show_menu_options()
 
 void show_menu_payment()
 {
-    cout << "Please show payment type:\n"
+    cout << "\nPlease show payment type:\n"
          << "1. Visa\n"
          << "2. MasterCard\n"
          << "3. Cash\n"
@@ -219,13 +222,13 @@ void show_menu_payment()
 
 void not_valid()
 {
-    cout << "Not a valid choice...\n";
+    cout << "\nNot a valid choice...\n";
 }
 
 string get_name()
 {
     string new_name = "";
-    cout << "What is your name?: ";
+    cout << "\nWhat is your name?: ";
     cin.ignore();
     getline(cin, new_name);
 
@@ -235,7 +238,7 @@ string get_name()
 string get_number()
 {
     string new_num;
-    cout << "What is your phone number (ex: 3235555555)?: ";
+    cout << "\nWhat is your phone number (ex: (323)555-5555)?: ";
     cin >> new_num;
     return new_num;
 }
@@ -243,7 +246,7 @@ string get_number()
 string get_card_number()
 {
     string card;
-    cout << "What is the card number?: ";
+    cout << "\nWhat is the card number?: ";
     cin >> card;
     return card;
 }
@@ -329,17 +332,20 @@ void get_order_confirmation(int villa, bool food, bool spa, bool mass, bool skin
     }
 
     // Apply tax
-    totale *= .1025;
+    totale = get_total(totale);
 
     gifts = get_gifts(option_count);
 
-    cout << "You have placed an order for\n"
+    cout << "\n\nYou have placed an order for:\n"
          << main_sel;
     if(option_count)
-        cout << "With the following options:"
+        cout << "With the following options:\n"
              << options_selected;
 
-    cout << endl << totale << endl << endl;
+    cout.setf(ios::fixed);
+    cout.setf(ios::showpoint);
+    cout.precision(2);
+    cout << endl << "Total price: $" << totale << endl << endl;
 
     if (gifts != "") {
         cout << "Congratulations. You will get the following free gift with your order:\n";
@@ -372,17 +378,39 @@ string get_gifts(int opt_count)
         case 1:
             return "";
         case 2:
-            return "Fruit basket";
+            return "Fruit basket\n";
         case 3:
-            return "Flower basket";
+            return "Flower basket\n";
     }
 
-    return "Wine basket";
+    return "Wine basket\n";
+}
+
+void show_options(bool food, bool spa, bool mass, bool skin, bool nail)
+{
+    string opt_str = "\nYou have the following options:\n";
+    if(food)
+        opt_str += "Food and Wine ($479.89)\n";
+    if(spa)
+        opt_str += "Spa ($291.20)\n";
+    if(mass)
+        opt_str += "Massage ($262.99)\n";
+    if(skin)
+        opt_str += "Skin Care ($188.29)\n";
+    if(nail)
+        opt_str += "Nail Care ($123.45)\n";
+
+    if(opt_str != "\nYou have the following options:\n")
+        cout << opt_str;
 }
 
 void get_address()
 {
-    cout << "What is your address? (ex. 333 Fake St.): ";
+    cout << "\nWhat is your address? (ex. 333 Fake St.): ";
 }
 
-
+double get_total(double totale)
+{
+    totale += (totale *= .1025);
+    return totale;
+}
