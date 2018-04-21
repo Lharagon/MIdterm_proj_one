@@ -1,3 +1,12 @@
+// Written by:      Luis H. Garcia
+// Assignment:      Project #1
+// Class:           CO SCI 243
+// Date:            04/20/2018
+// Description:     This application allows employees of a villa to place a customer
+//                  order using menu options. At the end of the program there should
+//                  be a order confirmation receit depicting all of the information 
+//                  that was collected.
+
 #include <iostream>
 #include <string>
 #include <cstdlib>
@@ -43,8 +52,10 @@ int main()
     {
         show_menu_top();
         cin >> choice;
+        // switch cases for Main menu
         switch(choice)
         {
+            // customer information
             case 1:
                 do
                 {
@@ -71,6 +82,7 @@ int main()
                     }
                 } while ( subchoice != 4);
                 break;
+            // main selection menu
             case 2:
                 do
                 {
@@ -93,6 +105,7 @@ int main()
                     }
                 } while( subchoice != 5 );
                 break;
+            // options menu
             case 3:
                 do
                 {
@@ -130,6 +143,7 @@ int main()
                      }
                 } while( subchoice != 7 );
                 break;
+            // menu for payment options
             case 4:
                 do
                 {
@@ -150,12 +164,14 @@ int main()
                     }
                 } while( subchoice != 4 );
                 break;
+            // Displays order confirmation, only if everything is complete
             case 5:
                 if (order_complete(payment_method, villa_selection, tel_number, name, address_number, address_street, address_st_abbr, card_number)) {
                     get_order_confirmation(villa_selection, food, spa, mass, skin, nail);
                     get_customer_information(name, tel_number, address_number, address_street, address_st_abbr, payment_method, card_number);
                     choice = 6;
                 }
+            // Exit program
             case 6:
                 break;
             default:
@@ -169,6 +185,7 @@ int main()
     return 0;
 }
 
+// shows options for main menu
 void show_menu_top()
 {
     cout << "\n\nPlease select the number of the option you would like:\n"
@@ -180,6 +197,7 @@ void show_menu_top()
          << "6. Exit\n";
 }
 
+// shows menu options for custormer info
 void show_menu_customer_info()
 {
     cout << "\nPlease input the number of the option you would like:\n"
@@ -189,6 +207,7 @@ void show_menu_customer_info()
          << "4. Main Menu\n";
 }
 
+// shows the menu for the main selection
 void show_menu_main_selection()
 {
     cout << "\nPlease select one of our four gorgeous villas:\n"
@@ -199,6 +218,7 @@ void show_menu_main_selection()
          << "5. Main Menu\n";
 }
 
+// shows menu options for the package options
 void show_menu_options()
 {
     cout << "\nPlease select as many of our five options as you'd like:\n"
@@ -211,6 +231,7 @@ void show_menu_options()
          << "7. Main Menu\n";
 }
 
+// shows menu options for payment options
 void show_menu_payment()
 {
     cout << "\nPlease show payment type:\n"
@@ -220,11 +241,13 @@ void show_menu_payment()
          << "4. Main Menu\n";
 }
 
+// convinience method for showing option chosen is not valid
 void not_valid()
 {
     cout << "\nNot a valid choice...\n";
 }
 
+// function to get the name of user
 string get_name()
 {
     string new_name = "";
@@ -235,6 +258,7 @@ string get_name()
     return new_name;
 }
 
+// function to get the phone number of user as string
 string get_number()
 {
     string new_num;
@@ -243,6 +267,7 @@ string get_number()
     return new_num;
 }
 
+// gets the card number of user as string
 string get_card_number()
 {
     string card;
@@ -251,6 +276,7 @@ string get_card_number()
     return card;
 }
 
+// checks if everything required was provided, if false, returns string of missing info
 bool order_complete(int pay, int vil, string tel, string name,
                     string add_num, string add_str, string add_abbr, string crd_num)
 {
@@ -271,6 +297,7 @@ bool order_complete(int pay, int vil, string tel, string name,
     if(add_abbr == "")
         error_message += "Address Street Abbreviation\n";
 
+    // if original message was modified, not complete
     if(error_message != "\n\nThe following information is missing:\n")
         complete = false;
 
@@ -280,12 +307,14 @@ bool order_complete(int pay, int vil, string tel, string name,
     return false;
 }
 
+// prints out the order information, eg. totals, selection, options
 void get_order_confirmation(int villa, bool food, bool spa, bool mass, bool skin, bool nail)
 {
     string options_selected = "", main_sel = "", gifts;
     int option_count = 0;
     double totale = 0.00;
 
+    // determine main selection based on number chosen in menu
     switch(villa)
     {
         case 1:
@@ -334,6 +363,7 @@ void get_order_confirmation(int villa, bool food, bool spa, bool mass, bool skin
     // Apply tax
     totale = get_total(totale);
 
+    //gets gift earn based on option count
     gifts = get_gifts(option_count);
 
     cout << "\n\nYou have placed an order for:\n"
@@ -354,6 +384,7 @@ void get_order_confirmation(int villa, bool food, bool spa, bool mass, bool skin
 
 }
 
+// gets customers information for order confirmation
 void get_customer_information(string name, string tel, string add_num, string add_st, string add_abbr, int pay, string card_num)
 {
     cout << "Sold to: " << name << endl;
@@ -370,6 +401,7 @@ void get_customer_information(string name, string tel, string add_num, string ad
 
 }
 
+// return a string containing gift, if any, based in number of options chosen
 string get_gifts(int opt_count)
 {
     switch(opt_count)
@@ -386,6 +418,7 @@ string get_gifts(int opt_count)
     return "Wine basket\n";
 }
 
+// updates the user interface to keep track of options chosen
 void show_options(bool food, bool spa, bool mass, bool skin, bool nail)
 {
     string opt_str = "\nYou have the following options:\n";
@@ -400,15 +433,18 @@ void show_options(bool food, bool spa, bool mass, bool skin, bool nail)
     if(nail)
         opt_str += "Nail Care ($123.45)\n";
 
+    // only shown if string was added to original message
     if(opt_str != "\nYou have the following options:\n")
         cout << opt_str;
 }
 
+// shows message for address extraction
 void get_address()
 {
     cout << "\nWhat is your address? (ex. 333 Fake St.): ";
 }
 
+// applies tax to final total
 double get_total(double totale)
 {
     totale += (totale *= .1025);
