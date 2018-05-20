@@ -4,7 +4,7 @@
 // Date:            04/20/2018
 // Description:     This application allows employees of a villa to place a customer
 //                  order using menu options. At the end of the program there should
-//                  be a order confirmation receit depicting all of the information 
+//                  be a order confirmation receipt depicting all of the information
 //                  that was collected.
 
 #include <iostream>
