@@ -3,16 +3,24 @@
 #include <fstream>
 using namespace std;
 
+const int MAX_CAPACITY = 10;
 void show_menu();
 void do_choice();
+bool is_empty(int length);
 void read_array(int arr[], ifstream& in_stream, int& length, int& active);
-void show_array(const int arr[10], int length, int active);
-void move_arrow_down(int& active, int length);
-void move_arrow_up(int& active, int length);
+void show_array(const int arr[MAX_CAPACITY], int length, int active);
+void select_down(int& active, int length);
+void select_up(int& active, int length);
+void move_down(int arr[], int& active, int length);
+void move_up(int arr[], int& active, int length);
+void delete_at(int arr[], int& active, int& length);
+void insert_at(int arr[], int& active, int& length, int value);
+void sort(int arr[], int& active, int length);
+
 
 int main()
 {
-	int length, active, arr[10];
+	int length, active, arr[MAX_CAPACITY];
 	ifstream in_stream;
 	ofstream out_stream;
 
@@ -21,14 +29,13 @@ int main()
 	read_array(arr, in_stream, length, active);
 	cout << endl << endl;
 	show_array(arr, length, active);
-	move_arrow_down(active, length);
+	insert_at(arr, active, length, 5);
 	show_array(arr, length, active);
-	move_arrow_up(active, length);
-	move_arrow_up(active, length);
-	move_arrow_up(active, length);
-	move_arrow_up(active, length);
+	insert_at(arr, active, length, 5);
 	show_array(arr, length, active);
-	move_arrow_down(active, length);
+	insert_at(arr, active, length, 5);
+	show_array(arr, length, active);
+	insert_at(arr, active, length, 5);
 	show_array(arr, length, active);
 
     return 0;
@@ -53,6 +60,15 @@ void do_choice()
 {
 }
 
+bool is_empty(int length)
+{
+	if(length == 0)
+	{
+		return true;
+	}
+	return false;
+}
+
 void read_array(int arr[], ifstream& in_stream, int& length, int& active)
 {
 	in_stream.open("test.txt");
@@ -67,7 +83,7 @@ void read_array(int arr[], ifstream& in_stream, int& length, int& active)
 	in_stream.close();
 }
 
-void show_array(const int arr[10], int length, int active)
+void show_array(const int arr[MAX_CAPACITY], int length, int active)
 {
 	for(int i = 0; i < length; i++)
 	{
@@ -83,7 +99,7 @@ void show_array(const int arr[10], int length, int active)
 	cout << endl;
 }
 
-void move_arrow_down(int& active, int length) 
+void select_down(int& active, int length) 
 {
 	if(length >= 1)
 	{
@@ -98,7 +114,7 @@ void move_arrow_down(int& active, int length)
 	}
 }
 
-void move_arrow_up(int& active, int length) 
+void select_up(int& active, int length) 
 {
 	if(length > 1)
 	{
@@ -111,4 +127,70 @@ void move_arrow_up(int& active, int length)
 			active--;
 		}
 	}
+}
+
+void move_down(int arr[], int& active, int length)
+{
+	int temp;
+	if(active != length - 1 && length > 1)
+	{
+		temp = arr[active];
+		arr[active] = arr[active + 1];
+		arr[++active] = temp;
+	}
+}
+
+void move_up(int arr[], int& active, int length)
+{
+	int temp;
+	if(active != 0 && length > 1)
+	{
+		temp = arr[active];
+		arr[active] = arr[active - 1];
+		arr[--active] = temp;
+	}
+}
+
+void delete_at(int arr[], int& active, int& length)
+{
+	if(!is_empty(length))
+	{
+		for(int i = active; i < length - 1; i++)
+		{
+			arr[i] = arr[i + 1];
+		}
+		arr[length - 1] = 0;
+		length--;
+		if(active == length)
+		{
+			active--;
+		}
+	}
+}
+
+void insert_at(int arr[], int& active, int& length, int value)
+{
+	if(length != MAX_CAPACITY)
+	{
+		if(is_empty(length))
+		{
+			arr[length] = value;
+			active++;
+		}
+		else
+		{
+			for(int i = length; i > active; i--)
+			{
+				arr[i] = arr[i - 1];
+			}
+			arr[active] = value;
+		}
+
+		length++;
+	}
+}
+
+void sort(int arr[], int& active, int length)
+{
+
 }
